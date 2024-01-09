@@ -9,7 +9,7 @@
         font-family: Arial, sans-serif;
         text-align: center;
         background-color: #f4f4f4;
-        background-image: url("./backgroundWaves.png");
+        background-image: url("./images/backgroundWaves.png");
         background-repeat: repeat;
         background-size: 10vw;
         background-blend-mode: soft-light;
@@ -29,18 +29,18 @@
         background-color: white;
         padding: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
       }
 
       .grid-item img {
         border-radius: 50%;
         width: 100px;
         height: 100px;
-        cursor: pointer;
         margin-bottom: 10px;
         object-fit: cover;
       }
 
-      .grid-item img:hover {
+      .grid-item:hover {
         opacity: 0.8;
       }
 
@@ -49,64 +49,127 @@
         font-weight: bold;
         margin-bottom: 5px;
       }
+
+      /* Popup styles */
+      .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1;
+      }
+
+      .popup-content {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        z-index: 2;
+      }
+
+      .popup-content button {
+        margin: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .close-btn {
+        background-color: #444;
+        color: white;
+      }
+
+      .launch-btn {
+        background-color: #4caf50;
+        color: white;
+      }
     </style>
   </head>
   <body>
     <h1>GitHub Creations Library</h1>
-    <div class="grid-container">
-      <div class="grid-item">
-        <label for="3dLibrary">3D Library</label>
-        <label for="3dLibrary">3D Library</label>
-        <label for="3dLibrary">testing folder</label>
-        <a href="https://n8th.github.io/3dLibrary/" target="_blank">
-          <img
-            id="3dLibrary"
-            src="./images/3dLibraryPreview.png"
-            alt="3D Library"
-          />
-        </a>
-      </div>
-      <div class="grid-item">
-        <label for="LotsOfDots">Lots of Dots</label>
-        <a href="https://n8th.github.io/LotsOfDots/" target="_blank">
-          <img
-            id="LotsOfDots"
-            src="./lotsOfDotsPreview.png"
-            alt="Lots of Dots"
-          />
-        </a>
-      </div>
-      <div class="grid-item">
-        <label for="pokedexSoldiers">Pokedex Soldiers</label>
-        <a href="https://n8th.github.io/pokedexSoldiers/" target="_blank">
-          <img
-            id="pokedexSoldiers"
-            src="./pokedexSoldiersPreview.png"
-            alt="Pokedex Soldiers"
-          />
-        </a>
-      </div>
 
-      <div class="grid-item">
-        <label for="placeholder">placeholder</label>
-        <a href="#">
-          <img
-            id="placeholder"
-            src="https://placekitten.com/100/100"
-            alt="placeholder"
-          />
-        </a>
+    <div class="grid-container">
+      <div
+        class="grid-item"
+        onclick="showPopup('3D Library', 'Browse through AI-generated images that seamlessly connect with each other, providing a repository of interesting and unique textures. All images are crafted using Poly.cam’s AI Texture Generator.', 'https://n8th.github.io/3dLibrary/')"
+      >
+        <label>3D Library</label>
+        <img src="./images/3dLibraryPreview.png" alt="3D Library" />
       </div>
-      <div class="grid-item">
-        <label for="placeholder">placeholder</label>
-        <a href="#">
-          <img
-            id="placeholder"
-            src="https://placekitten.com/101/101"
-            alt="placeholder"
-          />
-        </a>
+      <div
+        class="grid-item"
+        onclick="showPopup('Lots of Dots', `Lots of Dots is a simple yet satisfying site featuring a box with a moving dot at the center. When the dot touches a wall, it disappears and two more appear in its place. This process continues until it can't anymore.`, 'https://n8th.github.io/LotsOfDots/')"
+      >
+        <label>Lots of Dots</label>
+        <img src="./images/lotsOfDotsPreview.png" alt="Lots of Dots" />
+      </div>
+      <div
+        class="grid-item"
+        onclick="showPopup('Pokedex Soldiers', 'Pokedex Soldiers showcases personal and professional traits as Pokémon-like characters, reflecting the roles of Buffalo Soldiers. This interactive site was created to practice my frontend coding skills and to present traits in a unique, engaging way.', 'https://n8th.github.io/pokedexSoldiers/')"
+      >
+        <label>Pokedex Soldiers</label>
+        <img src="./images/pokedexSoldiersPreview.png" alt="Pokedex Soldiers" />
+      </div>
+      <div
+        class="grid-item"
+        onclick="showPopup('Placeholder', 'A simple cat placeholder.', '#')"
+      >
+        <label>Placeholder</label>
+        <img src="https://placekitten.com/100/100" alt="Placeholder" />
+      </div>
+      <div
+        class="grid-item"
+        onclick="showPopup('Placeholder', 'A simple cat placeholder.', '#')"
+      >
+        <label>Placeholder</label>
+        <img src="https://placekitten.com/101/101" alt="Placeholder" />
       </div>
     </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+
+    <!-- Popup Content -->
+    <div class="popup-content" id="popupContent">
+      <p id="popupInfo">Information about the site...</p>
+      <button class="close-btn" onclick="closePopup()">Close</button>
+      <button class="launch-btn" id="launchBtn" onclick="launchSite()">
+        Launch
+      </button>
+    </div>
+
+    <script>
+      var currentSiteUrl = "";
+
+      function showPopup(title, description, url) {
+        document.getElementById("popupInfo").textContent = description;
+        document.getElementById("popupOverlay").style.display = "block";
+        document.getElementById("popupContent").style.display = "block";
+        currentSiteUrl = url;
+      }
+
+      function closePopup() {
+        document.getElementById("popupOverlay").style.display = "none";
+        document.getElementById("popupContent").style.display = "none";
+      }
+
+      function launchSite() {
+        window.open(currentSiteUrl, "_blank");
+      }
+
+      // Event listener for the Esc key to close the popup
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closePopup();
+        }
+      });
+    </script>
   </body>
 </html>
