@@ -50,7 +50,6 @@
         margin-bottom: 5px;
       }
 
-      /* Popup styles */
       .popup-overlay {
         display: none;
         position: fixed;
@@ -133,10 +132,8 @@
       </div>
     </div>
 
-    <!-- Popup Overlay -->
     <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
 
-    <!-- Popup Content -->
     <div class="popup-content" id="popupContent">
       <p id="popupInfo">Information about the site...</p>
       <button class="close-btn" onclick="closePopup()">Close</button>
@@ -164,7 +161,6 @@
         window.open(currentSiteUrl, "_blank");
       }
 
-      // Event listener for the Esc key to close the popup
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closePopup();
